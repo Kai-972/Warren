@@ -2,7 +2,7 @@ const WebSocket = require("ws");
 const http = require("http");
 
 // base proxy domain
-const TUNNEL_BASE_URL = 'wss://fctex-2405-201-800d-f81f-cfd0-c1bd-8fcc-7e06.run.pinggy-free.link';
+const TUNNEL_BASE_URL = 'ws://localhost:8080';
 const AUTH_TOKEN = 'super-secret-token';
 const LOCAL_TARGET_PORT = 3000;
 
@@ -37,6 +37,9 @@ function connect() {
     if (data.type === "request") {
       const { requestId, method, path, headers, body } = data;
 
+      console.log(`\x1b[32m[CLIENT]\x1b[0m STEP 4 → Got request from Relay via WebSocket: ${method} ${path}`);
+      console.log(`\x1b[32m[CLIENT]\x1b[0m STEP 5 → Forwarding to local server on port ${LOCAL_TARGET_PORT}...`);
+
       delete headers.host;
 
       const options = {
@@ -52,6 +55,8 @@ function connect() {
         let responseChunks = [];
         res.on("data", (chunk) => responseChunks.push(chunk));
         res.on("end", () => {
+          console.log(`\x1b[32m[CLIENT]\x1b[0m STEP 5b → Local server replied with status: ${res.statusCode}`);
+          console.log(`\x1b[32m[CLIENT]\x1b[0m STEP 5c → Sending response back UP the WebSocket to Relay...`);
           const responsePayload = {
             type: "response",
             requestId: requestId,

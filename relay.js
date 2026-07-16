@@ -51,6 +51,9 @@ const server = http.createServer((req, res) => {
     pendingRequests.set(requestId, res);
 
     logger.http(req.method, targetPath, tunnelId);
+    console.log(`\x1b[35m[RELAY] \x1b[0mSTEP 1 → Public request received: ${req.method} ${targetPath}`);
+    console.log(`\x1b[35m[RELAY] \x1b[0mSTEP 2 → Wrapping into JSON payload with requestId: ${requestId}`);
+    console.log(`\x1b[35m[RELAY] \x1b[0mSTEP 3 → Sending down WebSocket tunnel to client...`);
 
     // payload
     const requestPayload = {
@@ -100,6 +103,8 @@ wss.on('connection', (ws, req) => {
         const pendingRes = pendingRequests.get(requestId);
 
         if (pendingRes) {
+          console.log(`\x1b[35m[RELAY] \x1b[0mSTEP 6 → Got response back from client via WebSocket (status: ${status})`);
+          console.log(`\x1b[35m[RELAY] \x1b[0mSTEP 7 → Delivering response to original browser/caller ✅`);
           pendingRes.writeHead(status, headers);
           pendingRes.end(Buffer.from(body, 'base64'));
           pendingRequests.delete(requestId);
