@@ -34,4 +34,15 @@ A lightweight client on the local machine opens an outbound connection to a publ
 3. start the target server**
 Runs the HTTP routing server and WebSocket listener on port 8080.
 ```bash
+
+**
+2. Start the client server
+**
+Runs the HTTP routing server and WebSocket listener on port 8080.
+```bash
+
+**
+3. start the target server**
+Runs the HTTP routing server and WebSocket listener on port 3000.
+```bash
 node relay.js
