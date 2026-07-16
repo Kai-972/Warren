@@ -29,7 +29,9 @@ A lightweight client on the local machine opens an outbound connection to a publ
 
 ### Usage
 
-**1. Start the Relay Server (Public/Cloud machine)**
+**1. Start the Relay Server (Public/Cloud machine)
+2. Start the client server
+3. start the target server**
 Runs the HTTP routing server and WebSocket listener on port 8080.
 ```bash
 node relay.js
