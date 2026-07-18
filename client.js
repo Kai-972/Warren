@@ -11,15 +11,15 @@ let currentTunnelId = 'tun_57042f53';
 
 function connect() {
   // build the dynamic registration string
-  let wsUrl = `${TUNNEL_BASE_URL}?token=${AUTH_TOKEN}`;
+  let wsUrl = ${TUNNEL_BASE_URL}?token=${AUTH_TOKEN};
   if (currentTunnelId) {
-    wsUrl += `&tunnelId=${currentTunnelId}`;
+    wsUrl += &tunnelId=${currentTunnelId};
   }
 
   const ws = new WebSocket(wsUrl);
 
   ws.on('error', (err) => {
-    console.error(`[Client] Connection error: ${err.message}`);
+    console.error([Client] Connection error: ${err.message});
   });
 
   ws.on("open", () => {
@@ -31,14 +31,14 @@ function connect() {
 
     if (data.type === "registered") {
       currentTunnelId = data.tunnelId;
-      console.log(`[Client] Tunnel active! Share this URL: http://localhost:8080/tunnels/${data.tunnelId}`);
+      console.log([Client] Tunnel active! Share this URL: http://localhost:8080/tunnels/${data.tunnelId});
     }
 
     if (data.type === "request") {
       const { requestId, method, path, headers, body } = data;
 
-      console.log(`\x1b[32m[CLIENT]\x1b[0m STEP 4 → Got request from Relay via WebSocket: ${method} ${path}`);
-      console.log(`\x1b[32m[CLIENT]\x1b[0m STEP 5 → Forwarding to local server on port ${LOCAL_TARGET_PORT}...`);
+      console.log(\x1b[32m[CLIENT]\x1b[0m STEP 4 → Got request from Relay via WebSocket: ${method} ${path});
+      console.log(\x1b[32m[CLIENT]\x1b[0m STEP 5 → Forwarding to local server on port ${LOCAL_TARGET_PORT}...);
 
       delete headers.host;
 
@@ -55,8 +55,8 @@ function connect() {
         let responseChunks = [];
         res.on("data", (chunk) => responseChunks.push(chunk));
         res.on("end", () => {
-          console.log(`\x1b[32m[CLIENT]\x1b[0m STEP 5b → Local server replied with status: ${res.statusCode}`);
-          console.log(`\x1b[32m[CLIENT]\x1b[0m STEP 5c → Sending response back UP the WebSocket to Relay...`);
+          console.log(\x1b[32m[CLIENT]\x1b[0m STEP 5b → Local server replied with status: ${res.statusCode});
+          console.log(\x1b[32m[CLIENT]\x1b[0m STEP 5c → Sending response back UP the WebSocket to Relay...);
           const responsePayload = {
             type: "response",
             requestId: requestId,
@@ -69,7 +69,7 @@ function connect() {
       });
 
       req.on("error", (err) => {
-        console.error(`[Client] Could not reach local server: ${err.message}`);
+        console.error([Client] Could not reach local server: ${err.message});
         ws.send(
           JSON.stringify({
             type: "response",
